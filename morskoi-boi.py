@@ -118,7 +118,7 @@ class Board:
         for ship in self.ships:
             if ship.shooten(d):
                 ship.lives -= 1
-                self.field[d.x][d.y] = '☼'
+                self.field[d.x][d.y] = 'x'
                 if ship.lives == 0:
                     self.count += 1
                     self.contur(ship, verb=True)
@@ -227,9 +227,19 @@ class Game:
         print('      y - номер столбца      ')
         print('_____________________________')
 
+    def print_boards(self):
+        print('-' * 20)
+        print('Доска игрока: ')
+        print(self.us.board)
+        print('-' * 20)
+        print('Доска компьютера: ')
+        print(self.ai.board)
+        print('-' * 20)
+
     def loop(self):
         num = 0
         while True:
+            self.print_boards()
             print('-' * 20)
             print('Доска игрока: ')
             print(self.us.board)
@@ -246,10 +256,12 @@ class Game:
             if repeat:
                 num -= 1
             if self.ai.board.defeat():
+                self.print_boards()
                 print('-' * 20)
                 print('Игрок победил!!!')
                 break
             if self.us.board.defeat():
+                self.print_boards()
                 print('-' * 20)
                 print('Победил компьютер!')
                 break
