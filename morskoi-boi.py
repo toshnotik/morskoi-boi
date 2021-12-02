@@ -240,13 +240,6 @@ class Game:
         num = 0
         while True:
             self.print_boards()
-            print('-' * 20)
-            print('Доска игрока: ')
-            print(self.us.board)
-            print('-' * 20)
-            print('Доска компьютера: ')
-            print(self.ai.board)
-            print('-' * 20)
             if num % 2 == 0:
                 print('Ходит игрок!')
                 repeat = self.us.move()
