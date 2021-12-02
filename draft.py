@@ -10,11 +10,35 @@ class Dot:
         return f'Dot({self.x}, {self.y})'
 
 
-a = Dot(1, 1)
-b = Dot(3, 2)
-c = Dot(1, 1)
+class Ship:
+    def __init__(self, bow, l, o):
+        self.bow = bow
+        self.l = l
+        self.o = o
+
+    @property
+    def dots(self):
+        ship_dots = []
+        for i in range(self.l):
+            cur_x = self.bow.x
+            cur_y = self.bow.y
+
+            if self.o == 0:
+                cur_x += i
+
+            elif self.o == 1:
+                cur_y += i
+
+            ship_dots.append(Dot(cur_x, cur_y))
+
+        return ship_dots
+
+    def shooten(self, shot):
+        return shot in self.dots
 
 
-aa = [Dot(1, 1), Dot(3, 5), Dot(3, 10), Dot(1, 5)]
 
-print(a in aa)
+
+s = Ship(Dot(1, 2), 4, 0)
+
+print(s.shooten(Dot(0, 2)))
