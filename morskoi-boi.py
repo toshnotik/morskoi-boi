@@ -35,16 +35,16 @@ class Ship:
     def dots(self):
         ship_dots = []
         for i in range(self.l):
-            cur_x = self.bow.x
-            cur_y = self.bow.y
+            cor_x = self.bow.x
+            cor_y = self.bow.y
 
             if self.o == 0:
-                cur_x += i
+                cor_x += i
 
             elif self.o == 1:
-                cur_y += i
+                cor_y += i
 
-            ship_dots.append(Dot(cur_x, cur_y))
+            ship_dots.append(Dot(cor_x, cor_y))
 
         return ship_dots
 
@@ -59,22 +59,53 @@ class Board:
 
         self.count = 0
 
-        self.field = [['0'] * size for _ in range(size)]
+        self.field = [['▒'] * size for _ in range(size)]
 
         self.busy = []
         self.ships = []
 
     def __str__(self):
         res = ''
-        res += '  | 1 | 2 | 3 | 4 | 5 | 6 |'
+        res += ' |1|2|3|4|5|6|'
         for i, row in enumerate(self.field):
-            res += f'\n{i + 1} | ' + ' | '.join(row) + ' |'
+            res += f'\n{i + 1}|' + '|'.join(row) + '|'
 
         if self.hid:
-            res = res.replace(' ', '0')
+            res = res.replace('█', '0')
         return res
+
+    def out(self, d):
+        return not ((0 <= d.x < self.size) and (0 <= d.y < self.size))
+
+    def contur(self, ship, verb = False):
+        near = [
+            (-1, -1), (-1, 0), (-1, 1),
+            (0, -1), (0, 0), (0, 1),
+            (1, -1), (1, 0), (1, 1)
+        ]
+        for d in ship.dots:
+            for dx, dy in near:
+                cor = Dot(d.x + dx, d.y + dy)
+                if not(self. out(cor)) and cor not in self.busy:
+                    if verb:
+                        self.field[cor.x] [cor.y] = '•'
+                    self.busy.append(cor)
+
+    def add_ship(self, ship):
+        for d in ship.dots:
+            if self.out(d) or d in self.busy:
+                raise BoardWrongShipException()
+
+        for d in ship.dots:
+            self.field[d.x] [d.y] = '█'
+            self.busy.append(d)
+
+        self.ships.append(ship)
+        self.contur(ship)
 
 
 b = Board()
+b.add_ship(Ship(Dot(1, 1), 2, 1))
+b.add_ship(Ship(Dot(5, 5), 1, 0))
 print(b)
 
